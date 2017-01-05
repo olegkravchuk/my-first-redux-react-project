@@ -3,19 +3,34 @@ import React, {Component, PropTypes} from 'react'
 
 export default class Page extends Component {
     onYearBtnClick(e){
-        this.props.selectYear(+e.target.innerText)
+        this.props.getPhotos(+e.target.innerText)
     }
     render(){
-        const {year, photos} = this.props.data;
+        const {year, photos, fetching, error} = this.props.data;
+        const years = [2017, 2016,2015,2014,2013,2012,2011,2010];
+
         return (
-            <div>
+            <div className='ib page'>
                 <p>
-                    <button onClick={::this.onYearBtnClick}>2017</button>
-                    <button onClick={::this.onYearBtnClick}>2016</button>
-                    <button onClick={::this.onYearBtnClick}>2015</button>
-                    <button onClick={::this.onYearBtnClick}>2014</button>
+                    {
+                        years.map(
+                            (item, index) => <button className='btn' key={index} onClick={::this.onYearBtnClick}>{item}</button>
+                        )
+                    }
                 </p>
-                <p>You have {photos.length} in {year} year</p>
+                <h3>{year} year</h3>
+                {error ? <p className='error'> Loading photos failed</p>: ''}
+                {
+                    fetching ?
+                        <p>Loading...</p>
+                        :
+                        photos.map((photo, index) =>
+                            <div key={index} className='photo'>
+                                <p><img src={photo.src} /></p>
+                                <p>{photo.likes.count}</p>
+                            </div>
+                        )
+                }
             </div>
         )
     }
@@ -24,7 +39,9 @@ export default class Page extends Component {
 Page.propTypes = {
     data: PropTypes.shape({
         year: PropTypes.number.isRequired,
-        photos: PropTypes.array.isRequired
+        photos: PropTypes.array.isRequired,
+        fetching: PropTypes.bool.isRequired,
+        error: PropTypes.string.isRequired
     }),
-    selectYear: PropTypes.func.isRequired
+    getPhotos: PropTypes.func.isRequired
 };

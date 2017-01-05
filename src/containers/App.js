@@ -4,13 +4,14 @@ import {connect} from 'react-redux'
 import User from '../components/User'
 import Page from '../components/Page'
 import * as pageActions from '../actions/PageActions'
+import * as userActions from '../actions/UserActions'
 
 class App extends Component {
     render(){
         return (
-            <div>
-                <User data={this.props.user}/>
-                <Page data={this.props.page} selectYear={this.props.pageActions.selectYear}/>
+            <div className='row'>
+                <Page data={this.props.page} getPhotos={this.props.pageActions.getPhotos}/>
+                <User data={this.props.user} handleLogin={this.props.userActions.handleLogin}/>
             </div>
         )
     }
@@ -25,7 +26,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return {
-        pageActions: bindActionCreators(pageActions, dispatch)
+        pageActions: bindActionCreators(pageActions, dispatch),
+        userActions: bindActionCreators(userActions, dispatch)
     }
 }
 

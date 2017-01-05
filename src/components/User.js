@@ -3,10 +3,19 @@ import React, {Component, PropTypes} from 'react'
 
 export default class User extends Component {
     render(){
-        const {name} = this.props.data;
+        const {name, error} = this.props.data;
+        let template;
+
+        if(name){
+            template = <p>Hello, {name}</p>
+        } else {
+            template = <button className='btn' onClick={this.props.handleLogin}>Login</button>
+        }
+
         return (
-            <div>
-                <p>It is work, {name}</p>
+            <div className='ib user'>
+                {template}
+                {error ? <p className='error'>{error}. <br/>Try again</p>: ''}
             </div>
         )
     }
@@ -14,7 +23,9 @@ export default class User extends Component {
 
 User.propTypes = {
     data: PropTypes.shape({
-        name: PropTypes.string.isRequired
-    })
+        name: PropTypes.string.isRequired,
+        error: PropTypes.string.isRequired
+    }),
+    handleLogin: PropTypes.func.isRequired
 };
 
